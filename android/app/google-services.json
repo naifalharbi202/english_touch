@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "892167164706",
+    "project_id": "call-me-d0afb",
+    "storage_bucket": "call-me-d0afb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892167164706:android:ebc77f773b14e34c200b7b",
+        "android_client_info": {
+          "package_name": "com.example.call_me"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUMgHPy0dR4YNaWRhwzbVZAwTdPqws9fI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
