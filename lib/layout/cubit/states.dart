@@ -18,6 +18,12 @@ class TranslationLoadingState extends AppStates {}
 
 class TranslationErrorState extends AppStates {}
 
+class SeachedCardsStates extends AppStates {}
+
+class EmptySearchedCardsState extends AppStates {}
+
+class ChangeFontSizeState extends AppStates {}
+
 class UpdateCachedSourcesState extends AppStates {}
 
 // Get User States //

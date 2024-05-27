@@ -16,11 +16,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {
-        // if (state is ChangeSwitchModeState) {
-        //   AppCubit.get(context).changeAppMode();
-        // }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Directionality(
           textDirection:
@@ -127,15 +123,63 @@ class SettingsScreen extends StatelessWidget {
                 color: isDark
                     ? const Color.fromARGB(255, 55, 50, 50)
                     : Colors.grey[200],
+                child: Padding(
+                  padding:
+                      const EdgeInsetsDirectional.symmetric(horizontal: 15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(context).font_size,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      Slider.adaptive(
+                          min: 16,
+                          max: 24,
+                          divisions: 4,
+                          label: fontSelectedSize.round().toString(),
+                          value: fontSelectedSize,
+                          onChanged: (value) {
+                            AppCubit.get(context).changeFontSize(value);
+                          }),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                color: isDark
+                    ? const Color.fromARGB(255, 55, 50, 50)
+                    : Colors.grey[200],
+                child: Row(
+                  children: [
+                    TextButton(
+                      child: Text(
+                        S.of(context).contact_us,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      onPressed: () {},
+                    ),
+                    const Icon(
+                      Icons.contact_mail_rounded,
+                      color: Color.fromARGB(255, 13, 131, 80),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: Dimensions.size(10, context),
+              ),
+              Container(
+                color: isDark
+                    ? const Color.fromARGB(255, 55, 50, 50)
+                    : Colors.grey[200],
                 child: Row(
                   children: [
                     // Sign out
 
                     TextButton(
-                      child: Text(
-                        S.of(context).sign_out,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
+                      child: Text(S.of(context).sign_out,
+                          style: Theme.of(context).textTheme.bodyLarge!),
                       onPressed: () {
                         //Sign me out
                         AppCubit.get(context).signOut(context, LoginScreen());
@@ -187,7 +231,7 @@ class SettingsScreen extends StatelessWidget {
                                       Navigator.pop(context);
                                     },
                                     child: Text(
-                                      'إلغاء',
+                                      S.of(context).canncel,
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
@@ -198,7 +242,7 @@ class SettingsScreen extends StatelessWidget {
                                       navigatTo(context, DeactivateScreen());
                                     },
                                     child: Text(
-                                      'تأكيد',
+                                      S.of(context).confirm,
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),

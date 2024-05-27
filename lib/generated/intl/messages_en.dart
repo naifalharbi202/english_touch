@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "choose_lang_exam":
             MessageLookupByLibrary.simpleMessage("Choose Exam Language"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "contact_us": MessageLookupByLibrary.simpleMessage("Contact Us"),
         "create_another_exam":
             MessageLookupByLibrary.simpleMessage("Create Another Exam"),
         "create_exam": MessageLookupByLibrary.simpleMessage("Create An Exam"),
@@ -40,6 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "exam_screen_title": MessageLookupByLibrary.simpleMessage("Exam Spot"),
         "extract_text":
             MessageLookupByLibrary.simpleMessage("Extract Text From Image"),
+        "font_size": MessageLookupByLibrary.simpleMessage("Font size"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot Password?"),
         "friend": MessageLookupByLibrary.simpleMessage("Friend"),
@@ -53,6 +55,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_member": MessageLookupByLibrary.simpleMessage("New Member?"),
         "new_register": MessageLookupByLibrary.simpleMessage("Sign Up"),
         "no": MessageLookupByLibrary.simpleMessage("No"),
+        "no_update": MessageLookupByLibrary.simpleMessage("No update"),
+        "nothing_entered": MessageLookupByLibrary.simpleMessage("Field empty"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "phone": MessageLookupByLibrary.simpleMessage("Phone No"),
         "question": MessageLookupByLibrary.simpleMessage("question"),
@@ -63,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "reset": MessageLookupByLibrary.simpleMessage("Reset Password"),
         "results": MessageLookupByLibrary.simpleMessage("Results"),
         "school": MessageLookupByLibrary.simpleMessage("School"),
+        "search": MessageLookupByLibrary.simpleMessage("Search"),
         "sentence_required":
             MessageLookupByLibrary.simpleMessage("Sentence is required"),
         "settings_title": MessageLookupByLibrary.simpleMessage("Settings"),

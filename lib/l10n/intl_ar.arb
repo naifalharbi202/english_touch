@@ -43,6 +43,13 @@
     "required_field" : "حقل مطلوب",
     "forgot_password" :"نسيت كلمة المرور",
     "must_be_six_digits": "أقل عدد خانات هو 6",
-    "new_register" : "تسجيل جديد"
+    "new_register" : "تسجيل جديد",
+    "no_update" : "لا يوجد تحديث",
+    "nothing_entered": "لا يوجد إدخال",
+    "search": "البحث",
+    "font_size" : "حجم الخط",
+    "contact_us" : "تواصل معنا"
+
+
 
 }

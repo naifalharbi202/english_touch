@@ -96,6 +96,7 @@ bool isCreateExamSelected = false;
 String source = '';
 String uId = '';
 List<WordModel> cards = [];
+List<WordModel> searchedCards = [];
 List<dynamic> retrievedWords = [];
 List<dynamic> retrievedSentences = [];
 List<dynamic> examWords = [];
@@ -121,6 +122,8 @@ List<String> cachedSources = [];
 final regex = RegExp(r'^[a-zA-Z0-9\s]+$');
 bool? isAppLanguageEnglish;
 String langCode = '';
+bool isSearching = false;
+double fontSelectedSize = 16;
 
 List<PopupMenuItem> sourceMenuItems(context) {
   return <PopupMenuItem>[
@@ -136,12 +139,8 @@ List<PopupMenuItem> sourceMenuItems(context) {
           const SizedBox(
             width: 4,
           ),
-          Text(
-            S.of(context).book,
-            style: const TextStyle(
-              fontFamily: 'Cairo',
-            ),
-          ),
+          Text(S.of(context).book,
+              style: Theme.of(context).textTheme.bodyLarge),
         ],
       ),
     ),
@@ -178,12 +177,8 @@ List<PopupMenuItem> sourceMenuItems(context) {
           const SizedBox(
             width: 4,
           ),
-          Text(
-            S.of(context).friend,
-            style: TextStyle(
-              fontFamily: 'Cairo',
-            ),
-          ),
+          Text(S.of(context).friend,
+              style: Theme.of(context).textTheme.bodyLarge),
         ],
       ),
     ),
@@ -200,9 +195,7 @@ List<PopupMenuItem> sourceMenuItems(context) {
           ),
           Text(
             S.of(context).school,
-            style: const TextStyle(
-              fontFamily: 'Cairo',
-            ),
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
         ],
       ),
@@ -218,12 +211,8 @@ List<PopupMenuItem> sourceMenuItems(context) {
           const SizedBox(
             width: 4,
           ),
-          Text(
-            S.of(context).another_source,
-            style: const TextStyle(
-              fontFamily: 'Cairo',
-            ),
-          ),
+          Text(S.of(context).another_source,
+              style: Theme.of(context).textTheme.bodyLarge),
         ],
       ),
     ),

@@ -491,6 +491,56 @@ class S {
       args: [],
     );
   }
+
+  /// `No update`
+  String get no_update {
+    return Intl.message(
+      'No update',
+      name: 'no_update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Field empty`
+  String get nothing_entered {
+    return Intl.message(
+      'Field empty',
+      name: 'nothing_entered',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search`
+  String get search {
+    return Intl.message(
+      'Search',
+      name: 'search',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Font size`
+  String get font_size {
+    return Intl.message(
+      'Font size',
+      name: 'font_size',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact Us`
+  String get contact_us {
+    return Intl.message(
+      'Contact Us',
+      name: 'contact_us',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

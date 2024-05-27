@@ -1,4 +1,5 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'package:call_me/shared/constants/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'colors.dart';
@@ -23,11 +24,11 @@ ThemeData lightMode = ThemeData(
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(),
     scaffoldBackgroundColor: Colors.white,
-    textTheme: const TextTheme(
+    textTheme: TextTheme(
         bodyLarge: TextStyle(
-      fontFamily: 'Cairo',
-      color: Colors.black,
-    )));
+            fontFamily: 'Cairo',
+            color: Colors.black,
+            fontSize: fontSelectedSize)));
 
 ThemeData darkMode = ThemeData(
   appBarTheme: const AppBarTheme(
@@ -46,6 +47,9 @@ ThemeData darkMode = ThemeData(
       unselectedItemColor: Colors.white),
   inputDecorationTheme:
       const InputDecorationTheme(labelStyle: TextStyle(color: Colors.grey)),
-  textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white, fontFamily: 'Cairo')),
+  textTheme: TextTheme(
+      bodyLarge: TextStyle(
+          color: Colors.white,
+          fontFamily: 'Cairo',
+          fontSize: fontSelectedSize)),
 );

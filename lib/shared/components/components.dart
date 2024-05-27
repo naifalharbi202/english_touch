@@ -11,6 +11,7 @@ import 'package:call_me/modules/card_details/card_details_screen.dart';
 import 'package:call_me/modules/dialouge/dialouge.dart';
 import 'package:call_me/modules/exam/exam_screen.dart';
 import 'package:call_me/modules/results/results_screen.dart';
+import 'package:call_me/modules/search/search_screen.dart';
 import 'package:call_me/shared/constants/constants.dart';
 import 'package:call_me/shared/dimentions.dart';
 
@@ -65,6 +66,7 @@ Widget defaultTextFormField(
         void Function()? onSuffixPress,
         Color prefixIconColor = Colors.blue,
         bool expandedField = false,
+        bool isSearchField = false,
         TextInputAction? textInputAction}) =>
     TextFormField(
       textDirection: textDirection,
@@ -97,12 +99,15 @@ Widget defaultTextFormField(
               ),
               onPressed: onSuffixPress),
           enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-              color: Colors.grey,
-            ),
+            borderSide: isSearchField
+                ? BorderSide.none
+                : const BorderSide(
+                    color: Colors.grey,
+                  ),
             borderRadius: BorderRadius.circular(10.0),
           ),
-          border: const OutlineInputBorder()),
+          border:
+              isSearchField ? InputBorder.none : const OutlineInputBorder()),
     );
 
 void navigatTo(context, Widget destination) => Navigator.push(
@@ -192,10 +197,12 @@ Widget defaultItem(WordModel model, context) => Directionality(
                               model.sentence.toString(),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontFamily: 'Cairo',
-                                  fontSize: Dimensions.size(17, context),
-                                  fontWeight: FontWeight.bold),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
                             ),
 
                             SizedBox(
@@ -204,13 +211,21 @@ Widget defaultItem(WordModel model, context) => Directionality(
                             // Keywords
                             if (model.editedWords!.isNotEmpty)
                               Container(
-                                height: Dimensions.size(22, context),
+                                height: Dimensions.size(27, context),
                                 width: double.infinity,
                                 child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
                                     shrinkWrap: true,
-                                    itemBuilder: (context, index) =>
-                                        Text(model.editedWords![index]),
+                                    itemBuilder: (context, index) => Text(
+                                          model.editedWords![index],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                  fontSize:
+                                                      fontSelectedSize - 2,
+                                                  color: Colors.black),
+                                        ),
                                     separatorBuilder: (context, index) =>
                                         const Text(','),
                                     itemCount: model.editedWords!.length),
@@ -252,11 +267,18 @@ Widget defaultItem(WordModel model, context) => Directionality(
     );
 
 PreferredSizeWidget defaultAppBar({required String title, context}) => AppBar(
-      title: Center(
-          child: Text(
+      actions: [
+        IconButton(
+            onPressed: () {
+              navigatTo(context, SearchScreen());
+            },
+            icon: const Icon(Icons.search))
+      ],
+      centerTitle: true,
+      title: Text(
         title,
         style: Theme.of(context).textTheme.bodyLarge,
-      )),
+      ),
       backgroundColor:
           isDark ? const Color.fromARGB(255, 15, 100, 91) : Colors.teal[500],
       systemOverlayStyle: SystemUiOverlayStyle(

@@ -3,6 +3,7 @@ import 'package:call_me/layout/cubit/cubit.dart';
 import 'package:call_me/layout/cubit/states.dart';
 import 'package:call_me/modules/sentence/add_sentence_screen.dart';
 import 'package:call_me/shared/components/components.dart';
+import 'package:call_me/shared/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

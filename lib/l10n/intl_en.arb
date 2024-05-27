@@ -43,7 +43,14 @@
     "required_field" : "Required",
     "forgot_password" : "Forgot Password?",
     "must_be_six_digits": "Minimum password length: 6 digits",
-    "new_register" : "Sign Up"
+    "new_register" : "Sign Up",
+    "no_update" : "No update",
+    "nothing_entered": "Field empty",
+    "search": "Search",
+    "font_size" : "Font size",
+    "contact_us" : "Contact Us"
+
+
 
 
 

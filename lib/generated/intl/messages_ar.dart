@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "choose_lang_exam":
             MessageLookupByLibrary.simpleMessage("اختر لغة الاختبار"),
         "confirm": MessageLookupByLibrary.simpleMessage("تأكيد"),
+        "contact_us": MessageLookupByLibrary.simpleMessage("تواصل معنا"),
         "create_another_exam":
             MessageLookupByLibrary.simpleMessage("إنشاء اختبار آخر"),
         "create_exam": MessageLookupByLibrary.simpleMessage("إنشاء اختبار"),
@@ -41,6 +42,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("قاعة الاختبار"),
         "extract_text":
             MessageLookupByLibrary.simpleMessage("هل لديك صورة تحوي على نص؟"),
+        "font_size": MessageLookupByLibrary.simpleMessage("حجم الخط"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور"),
         "friend": MessageLookupByLibrary.simpleMessage("صديق"),
@@ -53,6 +55,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_member": MessageLookupByLibrary.simpleMessage("عضو جديد؟"),
         "new_register": MessageLookupByLibrary.simpleMessage("تسجيل جديد"),
         "no": MessageLookupByLibrary.simpleMessage("لا"),
+        "no_update": MessageLookupByLibrary.simpleMessage("لا يوجد تحديث"),
+        "nothing_entered":
+            MessageLookupByLibrary.simpleMessage("لا يوجد إدخال"),
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
         "phone": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
         "question": MessageLookupByLibrary.simpleMessage("سؤال"),
@@ -63,6 +68,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "reset": MessageLookupByLibrary.simpleMessage("استعادة"),
         "results": MessageLookupByLibrary.simpleMessage("النتائج"),
         "school": MessageLookupByLibrary.simpleMessage("المدرسة"),
+        "search": MessageLookupByLibrary.simpleMessage("البحث"),
         "sentence_required":
             MessageLookupByLibrary.simpleMessage("يجب كتابة الجملة"),
         "settings_title": MessageLookupByLibrary.simpleMessage("الاعدادات"),

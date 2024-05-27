@@ -13,9 +13,12 @@ import 'package:call_me/modules/setting/settings_screen.dart';
 import 'package:call_me/shared/components/components.dart';
 import 'package:call_me/shared/constants/constants.dart';
 import 'package:call_me/shared/local/cachehelper.dart';
+import 'package:call_me/shared/styles/colors.dart';
+import 'package:call_me/shared/styles/styles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -63,6 +66,69 @@ class AppCubit extends Cubit<AppStates> {
 
   void updateCachedSources() {
     emit(UpdateCachedSourcesState());
+  }
+
+  ThemeData buildlightMode() {
+    return ThemeData(
+        primaryColor: defaultColor,
+        appBarTheme: const AppBarTheme(
+            titleTextStyle: TextStyle(color: Colors.black, fontFamily: 'Cairo'),
+            actionsIconTheme: IconThemeData(
+              color: Colors.black,
+            ),
+            iconTheme: IconThemeData(
+              color: Colors.black,
+            ),
+            systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: Colors.white,
+                statusBarIconBrightness: Brightness.dark),
+            color: Colors.white,
+            elevation: 0.0),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: defaultColor,
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(),
+        scaffoldBackgroundColor: Colors.white,
+        textTheme: TextTheme(
+            bodyLarge: TextStyle(
+                fontFamily: 'Cairo',
+                color: Colors.black,
+                fontSize: fontSelectedSize)));
+  }
+
+  ThemeData buildDarkMode() {
+    return ThemeData(
+      appBarTheme: const AppBarTheme(
+          color: Colors.black,
+          actionsIconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+          systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarIconBrightness: Brightness.light, //Controls status bar
+              statusBarColor: Colors.black)),
+      scaffoldBackgroundColor: const Color.fromARGB(255, 11, 11, 11),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          elevation: 0.7,
+          backgroundColor: Color.fromARGB(255, 24, 23, 23),
+          selectedItemColor: Color.fromARGB(255, 14, 76, 87),
+          unselectedItemColor: Colors.white),
+      inputDecorationTheme:
+          const InputDecorationTheme(labelStyle: TextStyle(color: Colors.grey)),
+      textTheme: TextTheme(
+          bodyLarge: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Cairo',
+              fontSize: fontSelectedSize)),
+    );
+  }
+
+  void changeFontSize(double value) {
+    fontSelectedSize = value;
+    lightMode = buildlightMode();
+    darkMode = buildDarkMode();
+    CacheHelper.saveData(key: "font", value: fontSelectedSize);
+
+    emit(ChangeFontSizeState());
   }
 
   void changeStyleMode(bool value) {
@@ -673,6 +739,19 @@ class AppCubit extends Cubit<AppStates> {
 
       // emit state
     });
+  }
+
+  void searchCards(searchedWords) {
+    searchedCards = cards
+        .where((element) =>
+            element.sentence!.toLowerCase().contains(searchedWords))
+        .toList();
+
+    emit(SeachedCardsStates());
+  }
+
+  emptySearchedCards() {
+    emit(EmptySearchedCardsState());
   }
 
   //* SQL LOCAL DATABASE OPERATIONS *//

@@ -33,8 +33,9 @@ void main() async {
   cachedSources = CacheHelper.getListData('otherSources') ?? [];
   isDark = CacheHelper.getData('mode') ?? false;
 
-  uId = CacheHelper.getData('uId') ?? '';
+  fontSelectedSize = CacheHelper.getData("font") ?? 16;
 
+  uId = CacheHelper.getData('uId') ?? '';
   langCode = CacheHelper.getData('lang') ?? '';
 
   Widget widget;
@@ -54,6 +55,7 @@ void main() async {
     MyApp(
       startwidget: widget,
       isModeChanged: isDark,
+      selectedFontSize: fontSelectedSize,
     ),
   );
 }
@@ -61,7 +63,9 @@ void main() async {
 class MyApp extends StatelessWidget {
   final Widget? startwidget;
   final bool? isModeChanged;
-  const MyApp({super.key, this.startwidget, this.isModeChanged});
+  final double? selectedFontSize;
+  const MyApp(
+      {super.key, this.startwidget, this.isModeChanged, this.selectedFontSize});
 
   // This widget is the root of your application.
   @override
