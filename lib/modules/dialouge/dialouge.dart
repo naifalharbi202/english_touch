@@ -1,6 +1,6 @@
 ﻿import 'package:call_me/layout/cubit/cubit.dart';
-import 'package:call_me/shared/components/components.dart';
 import 'package:call_me/shared/constants/constants.dart';
+import 'package:call_me/shared/dimentions.dart';
 import 'package:flutter/material.dart';
 
 class TrackingText extends StatefulWidget {
@@ -18,116 +18,107 @@ class _TrackingTextState extends State<TrackingText> {
     AppCubit.get(context).initVoices();
 
     speak(widget.text, context);
-    toastMessage(message: 'init');
   }
 
   String wordSpoken = '';
   int currentIndex = 0;
   int currentWordIndex = 0;
+
   // method will be called when speak is on
   Future speak(myText, context) async {
     AppCubit.get(context)
         .flutterTts
         .setProgressHandler((text, start, end, word) {
       text = widget.text;
-      setState(() {
-        start = currentWordStart = start;
-        currentWordEnd = end;
-      });
-    });
 
-    AppCubit.get(context).flutterTts.setPauseHandler(() {
-      currentWordStart = null;
-      currentWordEnd = null;
+      setState(() {
+        currentWordStart = start; // PAUSE BUG //
+        currentWordEnd = end;
+
+        if (currentWordEnd == widget.text.length - 1 ||
+            currentWordEnd == widget.text.length - 2) {
+          isSpeakOn = false;
+        }
+      });
     });
 
     await AppCubit.get(context).flutterTts.speak(myText);
     //
   }
 
-  Widget highlightWord(int index) {
-    // if (index < 0 || index >= widget.text.split(' ').length)
-    //   return; // Handle edge cases
-
-    final words = widget.text.split(' ');
-    final highlightedText = RichText(
-      text: TextSpan(
-        children: [
-          for (int i = 0; i < words.length; i++)
-            TextSpan(
-              text: words[i] + (i != words.length - 1 ? ' ' : ''), // Add spaces
-              style: i == index
-                  ? const TextStyle(
-                      color: Colors.yellow, fontWeight: FontWeight.bold)
-                  : const TextStyle(color: Colors.black),
-            ),
-        ],
-      ),
-    );
-
-    return highlightedText;
-    // Update your UI to display the highlightedText
-  }
-
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: Column(
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // highlightWord(currentWordIndex),
-          RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-                style: const TextStyle(
-                    fontWeight: FontWeight.w200,
-                    fontFamily: 'Cairo',
-                    color: Colors.black),
-                children: <TextSpan>[
-                  TextSpan(
-                      text: widget.text
-                          .toString()
-                          .substring(0, currentWordStart)),
-                  if (currentWordStart != null)
-                    TextSpan(
-                      text: widget.text
-                          .toString()
-                          .substring(currentWordStart!, currentWordEnd),
-                      style: const TextStyle(
-                          color: Colors.white, backgroundColor: Colors.amber),
+          Flexible(
+            fit: FlexFit.loose,
+            child: AlertDialog(
+              backgroundColor: isDark
+                  ? const Color.fromARGB(255, 55, 50, 50)
+                  : Colors.grey[200],
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // highlightWord(currentWordIndex),
+                    SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                              style: Theme.of(context).textTheme.bodyLarge,
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: widget.text
+                                        .toString()
+                                        .substring(0, currentWordStart)),
+                                if (currentWordStart != null)
+                                  TextSpan(
+                                    text: widget.text.toString().substring(
+                                        currentWordStart!, currentWordEnd),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        backgroundColor: Colors.amber),
+                                  ),
+                                if (currentWordEnd != null)
+                                  TextSpan(
+                                    text: widget.text
+                                        .toString()
+                                        .substring(currentWordEnd!),
+                                  ),
+                              ]),
+                        ),
+                      ),
                     ),
-                  if (currentWordEnd != null)
-                    TextSpan(
-                      text: widget.text.toString().substring(currentWordEnd!),
-                    ),
-                ]),
-          ),
-          Spacer(),
-          BottomNavigationBar(
-              currentIndex: currentIndex,
-              onTap: (index) {
-                setState(() {
-                  currentIndex = index;
-                });
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: Container(
-                    color: const Color.fromARGB(255, 220, 159, 46),
-                    child: IconButton(
-                      icon: const Icon(Icons.fast_rewind),
-                      onPressed: () {},
-                    ),
-                  ),
-                  label: '',
+                  ],
                 ),
-                BottomNavigationBarItem(
-                  icon: IconButton(
-                    icon: const Icon(Icons.pause_circle_outline_outlined),
-                    onPressed: () async {
+              ),
+            ),
+          ),
+
+          // BottomNavigation Bar
+          ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: BottomNavigationBar(
+                backgroundColor: isDark
+                    ? const Color.fromARGB(255, 88, 82, 82)
+                    : const Color.fromARGB(255, 232, 217, 217),
+                currentIndex: currentIndex,
+                onTap: (index) {
+                  // Here You make the logic of on press
+
+                  setState(() {
+                    currentIndex = index;
+
+                    if (index == 1) {
                       if (isSpeakOn) {
                         AppCubit.get(context).flutterTts.pause();
-                        isSpeakOn = false;
-                        toastMessage(message: 'IT\'s $isSpeakOn');
+                        setState(() {
+                          isSpeakOn = false;
+                        });
                       } else {
                         if (widget.text.isNotEmpty) {
                           for (int i = 0;
@@ -137,26 +128,37 @@ class _TrackingTextState extends State<TrackingText> {
                                 widget.text.substring(wordsCounter).split(' ');
                           }
 
-                          await speak(
-                              widget.text.substring(wordsCounter), context);
-
-                          isSpeakOn = true;
+                          speak(widget.text.substring(wordsCounter), context);
+                          setState(() {
+                            isSpeakOn = true;
+                          });
                         }
                       }
-                    },
+                    }
+                  });
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.fast_rewind,
+                      size: Dimensions.size(25, context),
+                    ),
+                    label: '',
                   ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: IconButton(
-                    icon: const Icon(Icons.replay),
-                    onPressed: () {
-                      toastMessage(message: wordsCounter.toString());
-                    },
+                  BottomNavigationBarItem(
+                    icon: isSpeakOn
+                        ? const Icon(Icons.pause_circle_outline_outlined)
+                        : const Icon(Icons.play_circle_outline_outlined),
+                    label: '',
                   ),
-                  label: '',
-                ),
-              ])
+                  const BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.replay,
+                    ),
+                    label: '',
+                  ),
+                ]),
+          ),
         ],
       ),
     );

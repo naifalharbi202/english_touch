@@ -5,7 +5,6 @@ import 'colors.dart';
 
 ThemeData lightMode = ThemeData(
     primaryColor: defaultColor,
-    primarySwatch: defaultColor,
     appBarTheme: const AppBarTheme(
         titleTextStyle: TextStyle(color: Colors.black, fontFamily: 'Cairo'),
         actionsIconTheme: IconThemeData(
@@ -39,15 +38,14 @@ ThemeData darkMode = ThemeData(
       systemOverlayStyle: SystemUiOverlayStyle(
           statusBarIconBrightness: Brightness.light, //Controls status bar
           statusBarColor: Colors.black)),
-  scaffoldBackgroundColor: Colors.black,
+  scaffoldBackgroundColor: const Color.fromARGB(255, 11, 11, 11),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colors.black,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey),
+      elevation: 0.7,
+      backgroundColor: Color.fromARGB(255, 24, 23, 23),
+      selectedItemColor: Color.fromARGB(255, 14, 76, 87),
+      unselectedItemColor: Colors.white),
   inputDecorationTheme:
       const InputDecorationTheme(labelStyle: TextStyle(color: Colors.grey)),
   textTheme: const TextTheme(
-      bodyLarge: TextStyle(
-    color: Colors.white,
-  )),
+      bodyLarge: TextStyle(color: Colors.white, fontFamily: 'Cairo')),
 );

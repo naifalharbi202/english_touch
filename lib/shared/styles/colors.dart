@@ -1,15 +1,10 @@
 ﻿import 'package:flutter/material.dart';
 
-MaterialColor defaultColor = Colors.blue;
+Color defaultColor = const Color.fromARGB(255, 14, 76, 87); // default app color
 
-List<Color> myColors = [
-  Colors.red,
-  Colors.blue,
-  Colors.green,
-  Colors.yellow,
-  Colors.purple,
-];
-
+Color defaultAnswerColor = Colors.white;
+Color correctAnswerColor = Colors.green;
+Color wrongAnswerColor = Colors.red;
 Widget colorItem(
   Color color,
 ) =>

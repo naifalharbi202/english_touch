@@ -24,3 +24,7 @@ class CreateUserErrorState extends RegisterStates {
   FirebaseAuthException? error;
   CreateUserErrorState(this.error);
 }
+
+class RegisterShowPasswordState extends RegisterStates {}
+
+class PasswordChangeState extends RegisterStates {}

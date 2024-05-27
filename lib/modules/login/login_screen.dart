@@ -1,9 +1,13 @@
-﻿import 'package:call_me/layout/home.dart';
+﻿import 'package:call_me/generated/l10n.dart';
+import 'package:call_me/layout/cubit/cubit.dart';
+import 'package:call_me/layout/home.dart';
 import 'package:call_me/modules/login/cubit/cubit.dart';
 import 'package:call_me/modules/login/cubit/states.dart';
+import 'package:call_me/modules/login/forgot_pass_screen.dart';
 import 'package:call_me/modules/register/register_screen.dart';
 import 'package:call_me/shared/components/components.dart';
 import 'package:call_me/shared/constants/constants.dart';
+import 'package:call_me/shared/dimentions.dart';
 import 'package:call_me/shared/local/cachehelper.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +20,7 @@ class LoginScreen extends StatelessWidget {
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final passFieldFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +32,8 @@ class LoginScreen extends StatelessWidget {
             CacheHelper.saveData(key: 'uId', value: state.uId).then((value) {
               uId = state.uId!;
             }).then((value) {
+              AppCubit.get(context).getCards();
+              AppCubit.get(context).currentIndex = 0;
               navigateAndFinish(context, const HomeLayout());
             });
           }
@@ -36,133 +43,196 @@ class LoginScreen extends StatelessWidget {
           return Scaffold(
             body: Form(
               key: formKey,
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      // App Bar
-                      Stack(
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadiusDirectional.only(
-                                  bottomEnd: Radius.circular(60.0)),
-                              gradient: LinearGradient(
-                                  colors: [
-                                    Colors.orange,
-                                    Colors.orangeAccent.withOpacity(0.7),
-                                  ],
-                                  begin: Alignment.center,
-                                  end: Alignment.bottomCenter),
-                            ),
-                            width: double.infinity,
-                            height: 300,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // App Bar
+                    Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadiusDirectional.only(
+                                bottomEnd: Radius.circular(60.0)),
+                            gradient: LinearGradient(
+                                colors: [
+                                  const Color.fromARGB(255, 10, 98, 92),
+                                  const Color.fromARGB(255, 40, 204, 188)
+                                      .withOpacity(0.7),
+                                ],
+                                begin: Alignment.center,
+                                end: Alignment.bottomCenter),
                           ),
-                          const CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.white,
-                            backgroundImage:
-                                AssetImage('assets/images/user.png'),
-                          ),
-                          const Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child: Text(
-                              'تسجيل الدخول',
-                              style: TextStyle(
-                                fontFamily: 'Cairo',
-                                fontSize: 20.0,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 30.0,
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
+                          width: double.infinity,
+                          height: 300,
                         ),
-                        child: Column(
-                          children: [
-                            //email field
-                            defaultTextFormField(
-                                controller: emailController,
-                                type: TextInputType.emailAddress,
-                                label: 'البريد الإلكتروني',
-                                suffixIcon: Icons.email,
-                                validate: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'حقل مطلوب';
-                                  }
-                                  return null;
-                                }),
-                            const SizedBox(
-                              height: 15.0,
+                        const CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.white,
+                          backgroundImage: AssetImage('assets/images/user.png'),
+                        ),
+                        Positioned(
+                          bottom: Dimensions.size(10, context),
+                          right: langCode == 'ar'
+                              ? Dimensions.size(10, context)
+                              : 0,
+                          left: langCode == 'ar'
+                              ? 0
+                              : Dimensions.size(10, context),
+                          child: Text(
+                            S.of(context).sign_in,
+                            style: const TextStyle(
+                              fontFamily: 'Cairo',
+                              fontSize: 20.0,
                             ),
-                            //pass field
-                            defaultTextFormField(
-                                controller: passController,
-                                isPassword: true,
-                                type: TextInputType.text,
-                                label: 'كلمة المرور',
-                                suffixIcon: Icons.lock,
-                                validate: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'حقل مطلوب';
-                                  }
-                                  return null;
-                                }),
-                            const SizedBox(
-                              height: 20,
-                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
 
-                            ConditionalBuilder(
-                              condition: state is! LoginLoadingState,
-                              builder: (context) => // sign up button //
-                                  defaultButton(
-                                text: 'تسجيل دخول',
-                                onPress: () {
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15,
+                      ),
+                      child: Column(
+                        children: [
+                          //email field
+                          defaultTextFormField(
+                              controller: emailController,
+                              type: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              label: S.of(context).email,
+                              onFieldSubmitted: (value) {
+                                passFieldFocusNode.requestFocus();
+                              },
+                              suffixIcon: Icons.email,
+                              validate: (value) {
+                                if (value!.isEmpty) {
+                                  return S.of(context).required_field;
+                                }
+                                return null;
+                              }),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          //pass field
+                          defaultTextFormField(
+                              controller: passController,
+                              isPassword: cubit.isPassword,
+                              focusNode: passFieldFocusNode,
+                              type: TextInputType.text,
+                              label: S.of(context).password,
+                              textInputAction: TextInputAction.done,
+                              suffixIcon: cubit.suffixIcon,
+                              onSuffixPress: () {
+                                cubit.showPasswordVisibility();
+                              },
+                              onChange: (value) {
+                                cubit.isPasswordUnderSix(value);
+                              },
+                              onFieldSubmitted: (value) {
+                                if (formKey.currentState!.validate()) {
                                   cubit.loginUser(
                                     email: emailController.text,
                                     password: passController.text,
                                   );
-                                },
-                              ),
-                              fallback: (context) => JumpingDots(
-                                color: Colors.orange,
+                                }
+                              },
+                              validate: (value) {
+                                if (value!.isEmpty) {
+                                  return S.of(context).required_field;
+                                }
+                                return null;
+                              }),
+                          SizedBox(
+                            height: Dimensions.size(5, context),
+                          ),
+                          // Check password digits
+                          if (cubit.isPassUnderSix == true)
+                            Container(
+                              width: double.infinity,
+                              color: Colors.red[500],
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Dimensions.size(8, context)),
+                                child: Text(
+                                  S.of(context).must_be_six_digits,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
-                            // text button
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextButton.icon(
-                                    onPressed: () {
-                                      navigatTo(context, RegisterScreen());
-                                    },
-                                    icon: const Icon(
-                                      Icons.verified_user_outlined,
-                                      color: Colors.orange,
-                                    ),
-                                    label: const Text(
-                                      'عضو جديد؟',
-                                      style: TextStyle(
-                                        fontFamily: 'Cairo',
-                                        color: Colors.black,
-                                      ),
-                                    )),
-                              ],
+
+                          ConditionalBuilder(
+                            condition: state is! LoginLoadingState,
+                            builder: (context) => // sign up button //
+                                defaultButton(
+                              text: S.of(context).sign_in,
+                              onPress: () {
+                                if (formKey.currentState!.validate()) {
+                                  cubit.loginUser(
+                                    email: emailController.text,
+                                    password: passController.text,
+                                  );
+                                }
+                              },
                             ),
-                          ],
-                        ),
+                            fallback: (context) => JumpingDots(
+                              color: Colors.orange,
+                            ),
+                          ),
+                          // text button
+                          Row(
+                            children: [
+                              // New Member
+                              Expanded(
+                                child: TextButton.icon(
+                                  onPressed: () {
+                                    navigatTo(context, RegisterScreen());
+                                  },
+                                  icon: const Icon(
+                                    Icons.verified_user_outlined,
+                                    color: Colors.orange,
+                                  ),
+                                  label: Text(
+                                    S.of(context).new_member,
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                ),
+                              ),
+
+                              // Forgot Password
+
+                              Expanded(
+                                child: TextButton.icon(
+                                  onPressed: () {
+                                    navigatTo(context, ForgetPasswordScreen());
+                                  },
+                                  icon: const Icon(
+                                    Icons.lock_outline,
+                                    color: Color.fromARGB(255, 160, 139, 107),
+                                  ),
+                                  label: Text(
+                                    textAlign: TextAlign.start,
+                                    S.of(context).forgot_password,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                            fontSize:
+                                                Dimensions.size(12.5, context)),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

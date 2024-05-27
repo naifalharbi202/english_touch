@@ -1,4 +1,5 @@
-﻿import 'package:call_me/layout/cubit/cubit.dart';
+﻿import 'package:call_me/generated/l10n.dart';
+import 'package:call_me/layout/cubit/cubit.dart';
 import 'package:call_me/layout/cubit/states.dart';
 import 'package:call_me/modules/sentence/add_sentence_screen.dart';
 import 'package:call_me/shared/components/components.dart';
@@ -18,19 +19,24 @@ class HomeLayout extends StatelessWidget {
             textDirection: TextDirection.rtl,
             child: Scaffold(
               // App Bar
-              appBar: defaultAppBar(title: 'المكتبة', context: context),
+              appBar: defaultAppBar(
+                  title: cubit.titles(context)[cubit.currentIndex],
+                  context: context),
 
               // Floating Action Button
-              floatingActionButton: FloatingActionButton.small(
-                onPressed: () {
-                  navigatTo(context, AddSentenceScreen());
-                },
-                backgroundColor: const Color.fromARGB(255, 14, 76, 87),
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-              ),
+
+              floatingActionButton: cubit.currentIndex == 0
+                  ? FloatingActionButton.small(
+                      onPressed: () {
+                        navigateAndFinish(context, AddSentenceScreen());
+                      },
+                      backgroundColor: const Color.fromARGB(255, 14, 76, 87),
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    )
+                  : null,
 
               // Bottom Nav Bar
               bottomNavigationBar: Padding(
@@ -41,9 +47,6 @@ class HomeLayout extends StatelessWidget {
                     cubit.changeBottomNaveIndex(index);
                   },
                   type: BottomNavigationBarType.fixed,
-                  backgroundColor: Colors.grey[195],
-                  selectedItemColor: Colors.teal,
-                  unselectedItemColor: Colors.black,
                   items: const [
                     BottomNavigationBarItem(
                       icon: Icon(Icons.home),
