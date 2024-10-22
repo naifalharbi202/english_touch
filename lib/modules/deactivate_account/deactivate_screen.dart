@@ -1,3 +1,4 @@
+import 'package:call_me/generated/l10n.dart';
 import 'package:call_me/layout/cubit/cubit.dart';
 import 'package:call_me/layout/cubit/states.dart';
 import 'package:call_me/modules/login/login_screen.dart';
@@ -19,11 +20,11 @@ class DeactivateScreen extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
         if (state is DeleteUserSuccessState) {
-          toastMessage(message: 'تم حذف جميع بيانات الحساب بنجاح');
+          toastMessage(message: S.of(context).data_erased_success);
           navigateAndFinish(context, LoginScreen()); //
         }
         if (state is ProvidedEmailAndPassErrorState) {
-          toastMessage(message: 'البيانات المدخلة غير متطابقة');
+          toastMessage(message: S.of(context).information_not_match);
         }
       },
       builder: (context, state) {
@@ -50,13 +51,13 @@ class DeactivateScreen extends StatelessWidget {
                         defaultTextFormField(
                             controller: emailDeactivateController,
                             type: TextInputType.emailAddress,
-                            label: 'البريد الإلكتروني',
+                            label: S.of(context).email,
                             suffixIcon: Icons.email,
                             onFieldSubmitted: (value) {},
                             textInputAction: TextInputAction.next,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'حقل مطلوب';
+                                return S.of(context).required_field;
                               }
                               return null;
                             }),
@@ -67,7 +68,7 @@ class DeactivateScreen extends StatelessWidget {
                             controller: passDeactivateController,
                             isPassword: true,
                             type: TextInputType.visiblePassword,
-                            label: 'كلمة المرور',
+                            label: S.of(context).password,
                             suffixIcon: Icons.lock,
                             onFieldSubmitted: (value) {
                               if (formKey.currentState!.validate()) {
@@ -80,7 +81,7 @@ class DeactivateScreen extends StatelessWidget {
                             textInputAction: TextInputAction.done,
                             validate: (value) {
                               if (value!.isEmpty) {
-                                return 'حقل مطلوب';
+                                return S.of(context).required_field;
                               }
                               return null;
                             }),
@@ -92,7 +93,7 @@ class DeactivateScreen extends StatelessWidget {
                         ConditionalBuilder(
                             condition: state is! DeleteUserLoadingState,
                             builder: (context) => defaultButton(
-                                text: 'حذف الحساب',
+                                text: S.of(context).delete_account,
                                 onPress: () {
                                   if (formKey.currentState!.validate()) {
                                     AppCubit.get(context).deactivateAccount(
@@ -102,7 +103,7 @@ class DeactivateScreen extends StatelessWidget {
                                   }
                                 }),
                             fallback: (context) => Center(
-                                child: LoadingAnimationWidget.prograssiveDots(
+                                child: LoadingAnimationWidget.progressiveDots(
                                     color: Colors.orange, size: 10)))
                       ],
                     ),

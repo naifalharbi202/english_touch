@@ -3,7 +3,7 @@
   String? email;
   String? password;
   String? phone;
-  String? uId;
+  int? id;
 
 // Constructer to create a user model instance
   UserModel(
@@ -11,7 +11,7 @@
     this.email,
     this.password,
     this.phone,
-    this.uId,
+    this.id,
   );
 
   // Named constructer .. To get data from firestore
@@ -20,7 +20,7 @@
     email = json['email'];
     password = json['password'];
     phone = json['phone'];
-    uId = json['uId'];
+    id = json['id'];
   }
 
   // Func to send data as a map (to users collection in firestore)
@@ -30,7 +30,7 @@
       'email': email,
       'password': password,
       'phone': phone,
-      'uId': uId,
+      'id': id,
     };
   }
 }

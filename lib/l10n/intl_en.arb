@@ -48,8 +48,35 @@
     "nothing_entered": "Field empty",
     "search": "Search",
     "font_size" : "Font size",
-    "contact_us" : "Contact Us"
+    "contact_us" : "Contact Us",
+    "deactivate_confirmation_msg" : "Are you sure you want to permanently delete your account? This action will erase all your data on the app.",
+    "delete_account" : "Delete Account",
+    "data_erased_success" : "All your data has been erased",
+    "information_not_match" : "The provided information does not match",
+    "you_will_be_notified" : "If your email is in the system, you'll be notified.",
+    "please_wait" : "This may take some time. Please Wait",
+    "only_arabic_and_english_supported" : "Sorry, only Arabic and English are supported at the moment",
+    "write_sentence" : "Write your sentence!",
+    "translate" : "Translate",
+    "no_internet" : "Oops! It seems you're not connected to the internet. Please check your connection and try again",
+    "how_many_words": "How many words would you like to learn?",
+    "learning_duration": "Learning Duration",
+    "from": "From",
+    "to": "To",
+    "lets_go": "Let's go",
+    "your_learning_plan" : "Your learning plan is:",
+    "words_in": "words in",
+    "day": "day(s)",
+    "skip": "Skip",
+    "Set_a_goal": "Set Your Goal",
+    "created_goal_successfully": "Success! Your new goal is now active.",
+    "my_dictionary": "My Dictionary"
 
+
+   
+
+
+ 
 
 
 

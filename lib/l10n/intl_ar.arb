@@ -48,7 +48,36 @@
     "nothing_entered": "لا يوجد إدخال",
     "search": "البحث",
     "font_size" : "حجم الخط",
-    "contact_us" : "تواصل معنا"
+    "contact_us" : "تواصل معنا",
+    "deactivate_confirmation_msg" : "هذا الإجراء سيحذف جميع بياناتك على هذا التطبيق. هل أنت متأكد من حذف حسابك؟",
+    "delete_account" : "حذف الحساب",
+    "data_erased_success" : "تم حذف جميع بيانات الحساب بنجاح",
+    "information_not_match" : "البيانات المدخلة غير متطابقة",
+    "you_will_be_notified" : "ستصلك رسالة  عبر البريد الإلكتروني، في حال كان البريد الخاص بك مسجل في النظام",
+    "please_wait" : "قد يستغرق بعض الوقت، كرمًا انتظر",
+    "only_arabic_and_english_supported" : "عفوًا، اللغات المدعومة حاليًا هي العربية والإنجليزية ",
+    "write_sentence" : "الكلمة/الجملة",
+    "translate" : "الترجمة",
+    "no_internet" : "عذرًا! يبدو أنك غير متصل بالإنترنت. يرجى التحقق من اتصالك والمحاولة مرة أخرى",
+    "how_many_words": "كم كلمة تريد أن تتعلم؟",
+    "learning_duration": "مدة التعلم:",
+    "choose_starting_date": "اختر تاريخ البداية",
+    "from": "من",
+    "to": "إلى",
+    "lets_go": "لننطلق",
+    "your_learning_plan" : "خطتك التعليمية هي:",
+    "words_in": "كلمة في",
+    "day": "يوم",
+    "skip": "تخطي",
+    "Set_a_goal": "حدد هدفك",
+    "created_goal_successfully": "رائع! هدفك الجديد أصبح نشطًا الآن",
+    "my_dictionary": "قاموسي"
+
+
+   
+
+
+
 
 
 

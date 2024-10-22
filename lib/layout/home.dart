@@ -6,6 +6,7 @@ import 'package:call_me/shared/components/components.dart';
 import 'package:call_me/shared/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 
 class HomeLayout extends StatelessWidget {
   const HomeLayout({super.key});
@@ -64,9 +65,45 @@ class HomeLayout extends StatelessWidget {
                   ],
                 ),
               ),
-              body: cubit.screens[cubit.currentIndex],
+              body: Builder(builder: (context) {
+                return OfflineBuilder(
+                  connectivityBuilder: (
+                    BuildContext context,
+                    ConnectivityResult connectivity,
+                    Widget child,
+                  ) {
+                    final bool connected =
+                        connectivity != ConnectivityResult.none;
+                    if (connected) {
+                      return cubit.screens[cubit.currentIndex];
+                    } else {
+                      return buildNoInternetWidget(context);
+                    }
+                  },
+                  child: const CircularProgressIndicator(),
+                );
+              }),
             ));
       },
+    );
+  }
+
+  Widget buildNoInternetWidget(context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Image(
+          image: AssetImage('assets/images/no_internet.png'),
+        ),
+        Text(
+          S.of(context).no_internet,
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        )
+      ],
     );
   }
 }

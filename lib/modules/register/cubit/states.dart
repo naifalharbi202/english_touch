@@ -1,4 +1,5 @@
-﻿import 'package:firebase_auth/firebase_auth.dart';
+﻿import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class RegisterStates {}
 
@@ -16,13 +17,11 @@ class RegisterErrorState extends RegisterStates {
 class CreateUserLoadingState extends RegisterStates {}
 
 class CreateUserSuccessState extends RegisterStates {
-  String? uid;
-  CreateUserSuccessState(this.uid);
+  CreateUserSuccessState();
 }
 
 class CreateUserErrorState extends RegisterStates {
-  FirebaseAuthException? error;
-  CreateUserErrorState(this.error);
+  CreateUserErrorState();
 }
 
 class RegisterShowPasswordState extends RegisterStates {}

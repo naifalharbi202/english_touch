@@ -26,6 +26,9 @@ class AppLangugaeScreen extends StatelessWidget {
                     if (uId.isEmpty) {
                       navigateAndFinish(context, LoginScreen());
                     } else {
+                      // Here handle if he skipped set a goal or not
+                      // if he skipped then direct him to homelayout
+                      // else direct him to milestone
                       navigateAndFinish(context, const HomeLayout());
                     }
                   });

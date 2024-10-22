@@ -1,15 +1,19 @@
 ﻿import 'package:call_me/generated/l10n.dart';
 import 'package:call_me/layout/cubit/cubit.dart';
 import 'package:call_me/layout/home.dart';
+
 import 'package:call_me/modules/login/cubit/cubit.dart';
 import 'package:call_me/modules/login/cubit/states.dart';
 import 'package:call_me/modules/login/forgot_pass_screen.dart';
+import 'package:call_me/modules/milestone/milestone_screen.dart';
 import 'package:call_me/modules/register/register_screen.dart';
 import 'package:call_me/shared/components/components.dart';
 import 'package:call_me/shared/constants/constants.dart';
 import 'package:call_me/shared/dimentions.dart';
 import 'package:call_me/shared/local/cachehelper.dart';
+
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jumping_dot/jumping_dot.dart';
@@ -29,9 +33,12 @@ class LoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
-            CacheHelper.saveData(key: 'uId', value: state.uId).then((value) {
-              uId = state.uId!;
+            CacheHelper.saveData(key: 'token', value: state.token)
+                .then((value) {
+              token = state.token!;
             }).then((value) {
+              print('Success LOGIN');
+              AppCubit.get(context).getUser();
               AppCubit.get(context).getCards();
               AppCubit.get(context).currentIndex = 0;
               navigateAndFinish(context, const HomeLayout());
@@ -135,10 +142,13 @@ class LoginScreen extends StatelessWidget {
                               },
                               onFieldSubmitted: (value) {
                                 if (formKey.currentState!.validate()) {
-                                  cubit.loginUser(
-                                    email: emailController.text,
-                                    password: passController.text,
-                                  );
+                                  Map<String, dynamic> creds = {
+                                    "email": emailController.text,
+                                    "password": passController.text,
+                                    "device_name":
+                                        "default", // Use device info instead of this
+                                  };
+                                  cubit.login(creds: creds);
                                 }
                               },
                               validate: (value) {
@@ -172,10 +182,13 @@ class LoginScreen extends StatelessWidget {
                               text: S.of(context).sign_in,
                               onPress: () {
                                 if (formKey.currentState!.validate()) {
-                                  cubit.loginUser(
-                                    email: emailController.text,
-                                    password: passController.text,
-                                  );
+                                  Map<String, dynamic> creds = {
+                                    "email": emailController.text,
+                                    "password": passController.text,
+                                    "device_name":
+                                        "default", // needs to be changed
+                                  };
+                                  cubit.login(creds: creds);
                                 }
                               },
                             ),
@@ -183,6 +196,7 @@ class LoginScreen extends StatelessWidget {
                               color: Colors.orange,
                             ),
                           ),
+
                           // text button
                           Row(
                             children: [

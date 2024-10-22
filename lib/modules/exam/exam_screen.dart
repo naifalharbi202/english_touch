@@ -85,6 +85,9 @@ class ExamScreen extends StatelessWidget {
               textDirection: TextDirection.ltr,
               child: Column(
                 children: [
+                  // defaultButton(
+                  //     text: 'TEST Getting WORDS',
+                  //     onPress: () => AppCubit.get(context).getWords()),
                   if (!isCreateExamSelected) intialExamWidget(context),
                   // English Exam in English
                   if (isCreateExamSelected && cards.isNotEmpty && isEnglishExam)
@@ -104,7 +107,7 @@ class ExamScreen extends StatelessWidget {
                               height: 5,
                             ),
                             Text(
-                              'قد يستغرق بعض الوقت، كرمًا انتظر ',
+                              S.of(context).please_wait,
                               style: Theme.of(context).textTheme.bodyLarge,
                             )
                           ],
@@ -130,7 +133,7 @@ class ExamScreen extends StatelessWidget {
                               height: Dimensions.size(7, context),
                             ),
                             Text(
-                              'قد يستغرق بعض الوقت، كرمًا انتظر     ',
+                              S.of(context).please_wait,
                               style: Theme.of(context).textTheme.bodyLarge,
                             )
                           ],

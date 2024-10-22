@@ -10,6 +10,7 @@ import 'package:call_me/modules/card_details/card_details_screen.dart';
 
 import 'package:call_me/modules/dialouge/dialouge.dart';
 import 'package:call_me/modules/exam/exam_screen.dart';
+import 'package:call_me/modules/pdf_view/pdf_view_screen.dart';
 import 'package:call_me/modules/results/results_screen.dart';
 import 'package:call_me/modules/search/search_screen.dart';
 import 'package:call_me/shared/constants/constants.dart';
@@ -71,7 +72,7 @@ Widget defaultTextFormField(
     TextFormField(
       textDirection: textDirection,
       focusNode: focusNode,
-      maxLength: isThisCounter ? 30 : null,
+      maxLength: isThisCounter ? 5 : null,
       readOnly: isNotEditalble,
       textInputAction: textInputAction,
       maxLines: expandedField ? null : 1,
@@ -135,7 +136,9 @@ Widget defaultItem(WordModel model, context) => Directionality(
       textDirection: TextDirection.ltr,
       child: GestureDetector(
         onTap: () {
-          //Go To Card Page
+          // print(model.createdAt);
+          print(model.docId);
+          //  Go To Card Page
           navigatTo(
               context,
               CardDetailsScreen(
@@ -160,8 +163,10 @@ Widget defaultItem(WordModel model, context) => Directionality(
             if (retrievedSentences.contains(model.sentence)) {
               retrievedSentences.remove(model.sentence);
             }
-
-            AppCubit.get(context).deleteCard(docId: model.docId);
+            print(model.docId);
+            AppCubit.get(context).deleteCard(
+              docId: model.docId,
+            );
           },
           key: UniqueKey(),
           child: Padding(
@@ -272,7 +277,13 @@ PreferredSizeWidget defaultAppBar({required String title, context}) => AppBar(
             onPressed: () {
               navigatTo(context, SearchScreen());
             },
-            icon: const Icon(Icons.search))
+            icon: const Icon(Icons.search)),
+        //if (isEnglishExam)
+        IconButton(
+            onPressed: () {
+              navigatTo(context, const PdfViewScreen());
+            },
+            icon: const Icon(Icons.download)),
       ],
       centerTitle: true,
       title: Text(

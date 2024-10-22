@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:call_me/generated/l10n.dart';
 import 'package:call_me/layout/cubit/cubit.dart';
 import 'package:call_me/layout/cubit/states.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:jumping_dot/jumping_dot.dart';
+import 'package:language_detector/language_detector.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 List<String> myList = [];
@@ -26,16 +29,15 @@ class CardDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    sentenceRetrievedDoc =
-        Document.fromJson(model!.documentAttributes!); // get sentence doc
-    translationRetrievedDoc =
-        Document.fromJson(model!.transDocumentAttributes!); // get sentence doc
-
+    sentenceRetrievedDoc = Document.fromJson(
+        model!.documentAttributes!.toList()); // get sentence doc
+    translationRetrievedDoc = Document.fromJson(
+        model!.transDocumentAttributes!.toList()); // get sentence doc
     sentenceToolBarController =
         AppCubit.get(context).fieldController(document: sentenceRetrievedDoc);
     translationToolBarController = AppCubit.get(context)
         .fieldController(document: translationRetrievedDoc);
-    source = model!.source.toString();
+    source = model!.source.toString() == 'null' ? '' : model!.source.toString();
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
         if (state is TranslationSuccessState) {
@@ -89,7 +91,7 @@ class CardDetailsScreen extends StatelessWidget {
                           TextQuill(
                             focusNode: focusNode1,
                             controller: sentenceToolBarController,
-                            placeHolder: 'Write your sentence!',
+                            placeHolder: S.of(context).write_sentence,
                           ),
                           SizedBox(
                             height: Dimensions.size(10, context),
@@ -102,7 +104,7 @@ class CardDetailsScreen extends StatelessWidget {
                                 child: TextQuill(
                                   focusNode: focusNode2,
                                   controller: translationToolBarController,
-                                  placeHolder: 'Translate',
+                                  placeHolder: S.of(context).translate,
                                 ),
                               ),
                               ConditionalBuilder(
@@ -258,7 +260,26 @@ class CardDetailsScreen extends StatelessWidget {
                   condition: state is! UpdateCardLoadingState,
                   builder: (context) => defaultButton(
                       text: S.of(context).update,
-                      onPress: () {
+                      onPress: () async {
+                        // if language is not arabic / english
+                        if (await LanguageDetector.getLanguageCode(
+                                    content: sentenceToolBarController.document
+                                        .toPlainText()) !=
+                                'en' &&
+                            await LanguageDetector.getLanguageCode(
+                                    content: sentenceToolBarController.document
+                                        .toPlainText()) !=
+                                'ar') {
+                          toastMessage(
+                              message: S
+                                  // ignore: use_build_context_synchronously
+                                  .of(context)
+                                  .only_arabic_and_english_supported,
+                              backgroundColor:
+                                  const Color.fromARGB(255, 56, 44, 10));
+                          return;
+                        }
+
                         // Clicked on update after clearing sentence field is empty
                         if (sentenceToolBarController.document
                             .toPlainText()
@@ -271,7 +292,6 @@ class CardDetailsScreen extends StatelessWidget {
                           return;
                         }
 
-                        if (sentenceToolBarController.document.isEmpty()) {}
                         // Clicked on update but no update has been made
                         if (model!.sentence.toString().trim() ==
                                 sentenceToolBarController.document
@@ -295,8 +315,6 @@ class CardDetailsScreen extends StatelessWidget {
                                     .toJson()
                                     .toString()
                                     .trim()) {
-                          // Clicked on update but no update has been made
-
                           toastMessage(
                               message: S.of(context).no_update,
                               backgroundColor: Colors.orange);
@@ -340,6 +358,7 @@ class CardDetailsScreen extends StatelessWidget {
                                     .toJson(),
                             translation: translationToolBarController.document
                                 .toPlainText(),
+                            createdAt: model!.createdAt,
                           );
                         }
                       }),

@@ -18,6 +18,8 @@ class TranslationLoadingState extends AppStates {}
 
 class TranslationErrorState extends AppStates {}
 
+class OpenPdfSuccessState extends AppStates {}
+
 class SeachedCardsStates extends AppStates {}
 
 class EmptySearchedCardsState extends AppStates {}
@@ -134,3 +136,37 @@ class GetTextFromImageErrorState extends AppStates {}
 // Cancel Exam
 
 class CancelExamSuccessState extends AppStates {}
+
+// Set Goal States
+
+class SetGoalLoadingState extends AppStates {}
+
+class SetGoalSuccessState extends AppStates {}
+
+class SetGoalErrorState extends AppStates {}
+
+// Get Challenge States
+
+class GetChallengeLoadingState extends AppStates {}
+
+class GetChallengeSuccessState extends AppStates {}
+
+class GetChallengeErrorState extends AppStates {}
+
+class GetChallengeNotFoundState extends AppStates {}
+
+// Check Progress State
+
+class ChangeProgressState extends AppStates {}
+
+// Time Left Color State
+
+class ChangeTimeLeftColorState extends AppStates {}
+
+// Free Dict API
+
+class FetchDefinitionsLoadingState extends AppStates {}
+
+class FetchDefinitionsSuccessState extends AppStates {}
+
+class FetchDefinitionsErrorState extends AppStates {}

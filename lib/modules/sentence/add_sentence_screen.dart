@@ -8,16 +8,17 @@ import 'package:call_me/shared/constants/constants.dart';
 import 'package:call_me/shared/dimentions.dart';
 import 'package:call_me/shared/local/cachehelper.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'dart:core';
+import 'package:intl/intl.dart' as dt; // Import the intl package for parsing
 
 import 'package:jumping_dot/jumping_dot.dart';
+import 'package:language_detector/language_detector.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:path/path.dart';
 
 List<String> myList = [];
 String mySentence = '';
@@ -36,10 +37,13 @@ class AddSentenceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     source = '';
-    sentenceToolBarController =
-        AppCubit.get(context).fieldController(document: AppCubit.sentenceDoc);
-    translationToolBarController = AppCubit.get(context)
-        .fieldController(document: AppCubit.translationDoc);
+    sentenceToolBarController = AppCubit.get(context).fieldController(
+      document: AppCubit.sentenceDoc,
+    );
+    translationToolBarController = AppCubit.get(context).fieldController(
+      document: AppCubit.translationDoc,
+    );
+
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
         if (state is TranslationSuccessState) {
@@ -64,7 +68,7 @@ class AddSentenceScreen extends StatelessWidget {
           //
         }
 
-        if (state is GetCardsSuccessState) {
+        if (state is AddCardSuccessState) {
           navigateAndFinish(context, const HomeLayout());
           Future.delayed(const Duration(seconds: 1), () {
             sentenceToolBarController.clear();
@@ -115,7 +119,7 @@ class AddSentenceScreen extends StatelessWidget {
                             TextQuill(
                               focusNode: focusNode1,
                               controller: sentenceToolBarController,
-                              placeHolder: 'Write your sentence!',
+                              placeHolder: S.of(context).write_sentence,
                             ),
                             SizedBox(
                               height: Dimensions.size(10, context),
@@ -128,7 +132,7 @@ class AddSentenceScreen extends StatelessWidget {
                                   child: TextQuill(
                                     focusNode: focusNode2,
                                     controller: translationToolBarController,
-                                    placeHolder: 'Translate',
+                                    placeHolder: S.of(context).translate,
                                   ),
                                 ),
                                 ConditionalBuilder(
@@ -146,7 +150,6 @@ class AddSentenceScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            // Sentence source field
                             SizedBox(
                               height: Dimensions.size(20, context),
                             ),
@@ -155,6 +158,9 @@ class AddSentenceScreen extends StatelessWidget {
                                 InkWell(
                                   //sources menu
                                   child: PopupMenuButton(
+                                    color: isDark
+                                        ? const Color.fromARGB(255, 55, 50, 50)
+                                        : Colors.grey[200],
                                     initialValue: source,
                                     elevation: 3,
                                     onSelected: (value) {
@@ -199,8 +205,9 @@ class AddSentenceScreen extends StatelessWidget {
                                                             .trim()
                                                             .isEmpty) {
                                                           toastMessage(
-                                                              message:
-                                                                  'لايوجد إدخال');
+                                                              message: S
+                                                                  .of(context)
+                                                                  .nothing_entered);
                                                         }
 
                                                         if (anotherSourceController
@@ -356,8 +363,9 @@ class AddSentenceScreen extends StatelessWidget {
                                                                 'otherSources');
                                                           }
                                                         },
-                                                        child: const Text(
-                                                            'حذف المصدر'),
+                                                        child: Text(S
+                                                            .of(context)
+                                                            .remove_source),
                                                       ),
                                                       TextButton(
                                                           onPressed: () {
@@ -436,7 +444,7 @@ class AddSentenceScreen extends StatelessWidget {
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // Check if any char has been written
                             if (sentenceToolBarController.document.length <=
                                     1 ||
@@ -445,7 +453,29 @@ class AddSentenceScreen extends StatelessWidget {
                                     .trim()
                                     .isEmpty) {
                               toastMessage(
-                                  message: S.of(context).sentence_required);
+                                  message: S.of(context).sentence_required,
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 56, 44, 10));
+                            }
+
+                            // Here Check for Lang Compatability
+                            else if (await LanguageDetector.getLanguageCode(
+                                        content: sentenceToolBarController
+                                            .document
+                                            .toPlainText()) !=
+                                    'en' &&
+                                await LanguageDetector.getLanguageCode(
+                                        content: sentenceToolBarController
+                                            .document
+                                            .toPlainText()) !=
+                                    'ar') {
+                              toastMessage(
+                                  message: S
+                                      // ignore: use_build_context_synchronously
+                                      .of(context)
+                                      .only_arabic_and_english_supported,
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 56, 44, 10));
                             } else {
                               var sentenceEditedText = sentenceToolBarController
                                   .document
@@ -458,9 +488,17 @@ class AddSentenceScreen extends StatelessWidget {
                                 for (int i = 0;
                                     i < sentenceEditedText.length;
                                     i++) {
+                                  print(sentenceEditedText[i]['attributes']);
                                   if (sentenceEditedText[i]['attributes'] !=
                                       null) {
                                     myList.add(sentenceEditedText[i]['insert']);
+                                    highlightedWords
+                                        .add(sentenceEditedText[i]['insert']);
+
+                                    print(
+                                        '-------------------+++-----------------');
+                                    print(highlightedWords);
+                                    print('----------+++-------------');
 
                                     if (retrievedWords.isNotEmpty) {
                                       retrievedWords
@@ -471,30 +509,26 @@ class AddSentenceScreen extends StatelessWidget {
                                       .document
                                       .toPlainText();
 
-                                  if (retrievedSentences.isNotEmpty) {
-                                    retrievedSentences.add(mySentence);
-                                    print(retrievedSentences);
+                                  // Ensure mySentence ends with '\n'
+                                  if (!mySentence.endsWith('\n')) {
+                                    mySentence += '\n';
                                   }
-
-                                  myTranslation = translationToolBarController
-                                      .document
-                                      .toPlainText();
                                 }
                                 // Now take what's written in sentence and other fields (if filled)
-
                                 cubit.addCard(
-                                    sentence: mySentence,
-                                    translation: myTranslation,
-                                    editedWords: myList,
-                                    pickedSource: source,
-                                    docAttributrs: sentenceToolBarController
-                                        .document
-                                        .toDelta()
-                                        .toJson(),
-                                    transDocAttributrs:
-                                        translationToolBarController.document
-                                            .toDelta()
-                                            .toJson());
+                                  sentence: mySentence,
+                                  translation: myTranslation,
+                                  editedWords: myList,
+                                  pickedSource: source,
+                                  docAttributrs: sentenceToolBarController
+                                      .document
+                                      .toDelta()
+                                      .toJson(),
+                                  transDocAttributrs: translationToolBarController
+                                      .document
+                                      .toDelta()
+                                      .toJson(), /*lastTouched: DateTime.now()*/
+                                );
                               }
                             }
                           },

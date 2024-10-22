@@ -30,9 +30,6 @@ class RegisterScreen extends StatelessWidget {
       child: BlocConsumer<RegisterCubit, RegisterStates>(
           listener: (context, state) {
         if (state is CreateUserSuccessState) {
-          CacheHelper.saveData(key: 'uId', value: state.uid).then((value) {
-            uId = state.uid!;
-          });
           navigateAndFinish(context, LoginScreen());
         }
       }, builder: (context, state) {

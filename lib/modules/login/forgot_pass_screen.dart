@@ -1,3 +1,4 @@
+import 'package:call_me/generated/l10n.dart';
 import 'package:call_me/layout/cubit/cubit.dart';
 import 'package:call_me/layout/cubit/states.dart';
 import 'package:call_me/shared/components/components.dart';
@@ -32,7 +33,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                           padding: EdgeInsetsDirectional.only(
                               bottom: Dimensions.size(70, context)),
                           child: Text(
-                            'ستصلك رسالة  عبر البريد الإلكتروني، في حال كان البريد الخاص بك مسجل في النظام',
+                            S.of(context).you_will_be_notified,
                             textAlign: TextAlign.center,
                             style: Theme.of(context)
                                 .textTheme
@@ -45,13 +46,13 @@ class ForgetPasswordScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             defaultTextFormField(
-                                style: Theme.of(context).textTheme.bodyText1,
+                                style: Theme.of(context).textTheme.bodyLarge,
                                 controller: emailController,
                                 type: TextInputType.emailAddress,
-                                label: 'البريد الإلكتروني',
+                                label: S.of(context).email,
                                 validate: (value) {
                                   if (value!.isEmpty) {
-                                    return 'أدخل البريد الإلكتروني';
+                                    return S.of(context).required_field;
                                   }
 
                                   return null;
@@ -64,7 +65,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                               condition:
                                   state is! SendPasswordResetLoadingState,
                               builder: (context) => defaultButton(
-                                  text: 'استعادة',
+                                  text: S.of(context).reset,
                                   onPress: () {
                                     if (formKey.currentState!.validate()) {
                                       AppCubit.get(context).forgetPassword(

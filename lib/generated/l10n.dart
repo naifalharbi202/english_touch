@@ -541,6 +541,226 @@ class S {
       args: [],
     );
   }
+
+  /// `Are you sure you want to permanently delete your account? This action will erase all your data on the app.`
+  String get deactivate_confirmation_msg {
+    return Intl.message(
+      'Are you sure you want to permanently delete your account? This action will erase all your data on the app.',
+      name: 'deactivate_confirmation_msg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Account`
+  String get delete_account {
+    return Intl.message(
+      'Delete Account',
+      name: 'delete_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All your data has been erased`
+  String get data_erased_success {
+    return Intl.message(
+      'All your data has been erased',
+      name: 'data_erased_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The provided information does not match`
+  String get information_not_match {
+    return Intl.message(
+      'The provided information does not match',
+      name: 'information_not_match',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If your email is in the system, you'll be notified.`
+  String get you_will_be_notified {
+    return Intl.message(
+      'If your email is in the system, you\'ll be notified.',
+      name: 'you_will_be_notified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This may take some time. Please Wait`
+  String get please_wait {
+    return Intl.message(
+      'This may take some time. Please Wait',
+      name: 'please_wait',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sorry, only Arabic and English are supported at the moment`
+  String get only_arabic_and_english_supported {
+    return Intl.message(
+      'Sorry, only Arabic and English are supported at the moment',
+      name: 'only_arabic_and_english_supported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Write your sentence!`
+  String get write_sentence {
+    return Intl.message(
+      'Write your sentence!',
+      name: 'write_sentence',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Translate`
+  String get translate {
+    return Intl.message(
+      'Translate',
+      name: 'translate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Oops! It seems you're not connected to the internet. Please check your connection and try again`
+  String get no_internet {
+    return Intl.message(
+      'Oops! It seems you\'re not connected to the internet. Please check your connection and try again',
+      name: 'no_internet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How many words would you like to learn?`
+  String get how_many_words {
+    return Intl.message(
+      'How many words would you like to learn?',
+      name: 'how_many_words',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Learning Duration`
+  String get learning_duration {
+    return Intl.message(
+      'Learning Duration',
+      name: 'learning_duration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `From`
+  String get from {
+    return Intl.message(
+      'From',
+      name: 'from',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To`
+  String get to {
+    return Intl.message(
+      'To',
+      name: 'to',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Let's go`
+  String get lets_go {
+    return Intl.message(
+      'Let\'s go',
+      name: 'lets_go',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your learning plan is:`
+  String get your_learning_plan {
+    return Intl.message(
+      'Your learning plan is:',
+      name: 'your_learning_plan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `words in`
+  String get words_in {
+    return Intl.message(
+      'words in',
+      name: 'words_in',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `day(s)`
+  String get day {
+    return Intl.message(
+      'day(s)',
+      name: 'day',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip`
+  String get skip {
+    return Intl.message(
+      'Skip',
+      name: 'skip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set Your Goal`
+  String get Set_a_goal {
+    return Intl.message(
+      'Set Your Goal',
+      name: 'Set_a_goal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Success! Your new goal is now active.`
+  String get created_goal_successfully {
+    return Intl.message(
+      'Success! Your new goal is now active.',
+      name: 'created_goal_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Dictionary`
+  String get my_dictionary {
+    return Intl.message(
+      'My Dictionary',
+      name: 'my_dictionary',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
