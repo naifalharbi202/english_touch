@@ -719,8 +719,10 @@ class AppCubit extends Cubit<AppStates> {
 
 // Laravel Get Challenge ID
 
-  void getChallengeId() async {
-    challenge = CacheHelper.getData('goal_${userModel!.id}');
+  void getChallengeId(
+      {bool? isFromDictionary, Map<String, dynamic>? learnedData}) async {
+    challenge = CacheHelper.getData(
+        'goal_${userModel!.id}'); // This must be deleted from cache on goal removal
 
     if (challenge == null) {
       // Means, user didn't set a goal yet or signed in from different device
@@ -728,8 +730,18 @@ class AppCubit extends Cubit<AppStates> {
         DioHelper.setAuthToken(token);
         Response response = await DioHelper.getData(url: '/user/challenge');
         if (response.statusCode == 200) {
-          // if there is a challenge id
-          getChallenge(response.data['challengeId']);
+          print('DATA FROM GET CHALLENGE ID ${response.data}');
+
+          // This means user coming from tracking progress
+          if (isFromDictionary == null) {
+            getChallenge(response.data['challengeId']);
+          } else {
+            //User is coming from dictionary screen
+            getChallenge(response.data['challengeId'],
+                isFromDictionary: true, learnedData: learnedData);
+          }
+
+          emit(GetChallengeIdSuccessState());
         }
       } catch (error) {
         // Not found or Server Down
@@ -738,13 +750,21 @@ class AppCubit extends Cubit<AppStates> {
     } else {
       // Means, user has already set a goal
       print('GETTING CHALLENGE FROM ID SAVED IN CACHE');
-      getChallenge(challenge);
+      // This means user coming from tracking progress
+      if (isFromDictionary == null) {
+        getChallenge(challenge);
+      } else {
+        //User is coming from dictionary screen
+        getChallenge(challenge,
+            isFromDictionary: true, learnedData: learnedData);
+      }
     }
   }
 
   GoalModel? goalModel;
 // Laravel Get Challenge
-  void getChallenge(int challengeId) async {
+  void getChallenge(int challengeId,
+      {bool? isFromDictionary, Map<String, dynamic>? learnedData}) async {
     {
       try {
         DioHelper.setAuthToken(token);
@@ -753,13 +773,24 @@ class AppCubit extends Cubit<AppStates> {
 
         if (response.statusCode == 200) {
           goalModel = GoalModel.fromJson(response.data['challenge']);
-          print('LEARNED WORDS COUNTER === ${goalModel!.learnedWordsCounter}');
 
-          print('PERIOD OF LEARNING');
-          print(
-              '${goalModel!.endDate!.difference(goalModel!.startDate!).inDays}');
+          if (isFromDictionary != null) {
+            print("GOT HEEEEEERE");
 
-          emit(GetChallengeSuccessState());
+            learnedData!['learned_words_counter'] =
+                goalModel!.learnedWordsCounter! + 1;
+
+            updateLearnedWords(learnedData);
+          } else {
+            // Just emit state
+            emit(GetChallengeSuccessState());
+          }
+
+          // print('LEARNED WORDS COUNTER === ${goalModel!.learnedWordsCounter}');
+
+          // print('PERIOD OF LEARNING');
+          // print(
+          //     '${goalModel!.endDate!.difference(goalModel!.startDate!).inDays}');
         }
       } catch (error) {
         //Unauthorized access or Server Down
@@ -774,7 +805,7 @@ class AppCubit extends Cubit<AppStates> {
 
 // Laravel Delete Challenge
 
-  // Laravel -- UPDATE A CARD
+// Laravel -- UPDATE A CARD
   void updateCard(
       {required docId,
       documentAttributes,
@@ -1262,16 +1293,51 @@ class AppCubit extends Cubit<AppStates> {
       }
 
       // Loop End
-      print('DEFINTIONS LENGTHHHH ${definitions.length}');
-      print('Translations LENGTHHHH ${translations.length}');
-      print('Examples LENGTHHHH ${examples.length}');
-      print('Audio LENGTHHHH ${audioUrls.length}');
+      // print('DEFINTIONS LENGTHHHH ${definitions.length}');
+      // print('Translations LENGTHHHH ${translations.length}');
+      // print('Examples LENGTHHHH ${examples.length}');
+      // print('Audio LENGTHHHH ${audioUrls.length}');
 
       emit(FetchDefinitionsSuccessState());
     } catch (error) {
       print('ERROR $error');
       emit(FetchDefinitionsErrorState());
     }
+  }
+
+  // Update Learned Words
+
+  void updateLearnedWords(Map<String, dynamic> learnedCounterAndList) async {
+    //
+
+    emit(UpdateLearnedWordsCounterLoadingState());
+    try {
+      Response response = await DioHelper.updateSingleResource(
+          url: '/challenges/${goalModel!.id}/learned-words-counter',
+          data: learnedCounterAndList,
+          token: token);
+
+      if (response.statusCode == 200) {
+        print(
+            'This is the list of learned words ------ ${goalModel!.acquiredWords}');
+        emit(UpdateLearnedWordsCounterSuccessState());
+      }
+    } catch (error) {
+      print(error);
+      toastMessage(
+          message: langCode == 'en'
+              ? 'Unexpected Error. Try again later'
+              : 'حدث خطأ غير متوقع، يرجى المحاولة لاحقًا');
+
+      emit(UpdateLearnedWordsCounterErrorState());
+    }
+  }
+
+  String selectedSegment = 'Studying';
+
+  changeSelectedSegment(String selected) {
+    selectedSegment = selected;
+    emit(ChangeSelectedSegmentState());
   }
 }
 

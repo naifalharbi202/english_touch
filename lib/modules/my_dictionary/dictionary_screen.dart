@@ -6,9 +6,12 @@ import 'package:call_me/shared/constants/constants.dart';
 import 'package:call_me/shared/dimentions.dart';
 import 'package:call_me/shared/remote/dict_api.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import 'package:translator/translator.dart';
 
 extension StringCasingExtension on String {
@@ -33,95 +36,176 @@ class MyDictionaryScreen extends StatelessWidget {
           textDirection: TextDirection.ltr,
           child: Scaffold(
             appBar: AppBar(),
-            body: PageView.builder(
-                itemCount: highlightedWords.length,
-                itemBuilder: (context, index) {
-                  //final wordData = cubit.wordModel!.editedWords![index];
-
-                  return Padding(
-                    padding: const EdgeInsets.all(19.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              highlightedWords[index],
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25,
-                              ),
+            body: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.size(9, context)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SegmentedButton<String>(
+                          showSelectedIcon: false,
+                          segments: const [
+                            ButtonSegment<String>(
+                              value: 'Studying',
+                              label: Text('Studying'),
                             ),
-                            SizedBox(
-                              width: Dimensions.size(5, context),
-                            ),
-                            if (cubit.audioUrls[index] != 'No audio available')
-                              IconButton(
-                                onPressed: () async {
-                                  final player = AudioPlayer();
-
-                                  await player.play(
-                                    UrlSource(cubit.audioUrls[index]!),
-                                  );
-                                },
-                                icon: const Icon(Icons.volume_up),
-                              ),
-                            const Spacer(),
-                            Text(
-                              cubit.translations[index] ?? '',
-                              style: Theme.of(context).textTheme.bodyLarge,
+                            ButtonSegment<String>(
+                              value: 'Know it',
+                              label: Text('Know it'),
                             ),
                           ],
+                          selected: {cubit.selectedSegment},
+                          onSelectionChanged: (Set<String> newSelection) {
+                            cubit.changeSelectedSegment(newSelection.first);
+                          },
+                          style: SegmentedButton.styleFrom(
+                            selectedBackgroundColor:
+                                const Color.fromARGB(255, 102, 157, 88),
+                            disabledBackgroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.zero, // No border radius
+                            ),
+                          ),
                         ),
-// Display definitions and examples for each part of speech
-                        for (var partOfSpeech in [
-                          'noun',
-                          'verb',
-                          'adjective',
-                          'adverb',
-                          'pronoun',
-                          'preposition',
-                        ]) ...[
-                          if (cubit.definitions[index]!
-                                  .containsKey(partOfSpeech) &&
-                              cubit.definitions[index]![partOfSpeech] !=
-                                  null) ...[
-                            Text(
-                              partOfSpeech.capitalizeFirstOfEach(),
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                            // Display the single definition
-                            Text(
-                              cubit.definitions[index]![partOfSpeech] ??
-                                  'No definition available',
-                            ),
-                            const SizedBox(height: 10),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: PageView.builder(
+                      itemCount: highlightedWords.length,
+                      itemBuilder: (context, index) {
+                        String newWord = highlightedWords[index];
 
-                            // Check if there are examples available
-                            if (cubit.examples[index][partOfSpeech] != null &&
-                                cubit.examples[index][partOfSpeech]!
-                                    .isNotEmpty) ...[
-                              const Text('Example(s):'),
-                              // Display up to two examples
-                              for (int i = 0;
-                                  i <
-                                          cubit.examples[index][partOfSpeech]!
-                                              .length &&
-                                      i < 2;
-                                  i++) ...[
-                                Text(
-                                  cubit.examples[index][partOfSpeech]![i] ??
-                                      'No example available',
-                                ),
+                        return Padding(
+                          padding: const EdgeInsets.all(19.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // English Word - Pronunciation - Ar Translation
+                              Row(
+                                children: [
+                                  Text(
+                                    highlightedWords[index],
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: Dimensions.size(5, context),
+                                  ),
+                                  if (cubit.audioUrls[index] !=
+                                      'No audio available')
+                                    IconButton(
+                                      onPressed: () async {
+                                        final player = AudioPlayer();
+
+                                        await player.play(
+                                          UrlSource(cubit.audioUrls[index]!),
+                                        );
+                                      },
+                                      icon: const Icon(Icons.volume_up),
+                                    ),
+                                  const Spacer(),
+                                  Text(
+                                    cubit.translations[index] ?? '',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                ],
+                              ),
+                              // Display definitions and examples for each part of speech
+                              for (var partOfSpeech in [
+                                'noun',
+                                'verb',
+                                'adjective',
+                                'adverb',
+                                'pronoun',
+                                'preposition',
+                              ]) ...[
+                                if (cubit.definitions[index]!
+                                        .containsKey(partOfSpeech) &&
+                                    cubit.definitions[index]![partOfSpeech] !=
+                                        null) ...[
+                                  Text(
+                                    partOfSpeech.capitalizeFirstOfEach(),
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                  // Display the single definition
+                                  Text(
+                                    cubit.definitions[index]![partOfSpeech] ??
+                                        'No definition available',
+                                  ),
+                                  const SizedBox(height: 10),
+
+                                  // Check if there are examples available
+                                  if (cubit.examples[index][partOfSpeech] !=
+                                          null &&
+                                      cubit.examples[index][partOfSpeech]!
+                                          .isNotEmpty) ...[
+                                    const Text('Example(s):'),
+                                    // Display up to two examples
+                                    for (int i = 0;
+                                        i <
+                                                cubit
+                                                    .examples[index]
+                                                        [partOfSpeech]!
+                                                    .length &&
+                                            i < 2;
+                                        i++) ...[
+                                      Text(
+                                        cubit.examples[index]
+                                                [partOfSpeech]![i] ??
+                                            'No example available',
+                                      ),
+                                    ],
+                                    const SizedBox(height: 20),
+                                  ],
+                                ],
                               ],
-                              const SizedBox(height: 20),
+                              SizedBox(
+                                height: Dimensions.size(10, context),
+                              ),
+                              // Switch .. if on means I know it
+                              ToggleSwitch(
+                                minWidth: Dimensions.size(140, context),
+                                initialLabelIndex: 1,
+                                cornerRadius: 20.0,
+                                activeFgColor: Colors.white,
+                                inactiveBgColor: Colors.grey,
+                                inactiveFgColor: Colors.white,
+                                totalSwitches: 2,
+                                labels: const ['Learned', 'Still Learning'],
+                                icons: const [Icons.check, Icons.macro_off],
+                                activeBgColors: const [
+                                  [Colors.blue],
+                                  [Colors.pink]
+                                ],
+                                onToggle: (index) {
+                                  // This will add one to learned words counter
+                                  if (index == 0) {
+                                    Map<String, dynamic> wordAndCounter = {
+                                      'learned_words_counter': 1,
+                                      'new_word': newWord
+                                    };
+                                    cubit.getChallengeId(
+                                        isFromDictionary: true,
+                                        learnedData: wordAndCounter);
+                                  }
+                                },
+                              ),
                             ],
-                          ],
-                        ],
-                      ],
-                    ),
-                  );
-                }),
+                          ),
+                        );
+                      }),
+                ),
+              ],
+            ),
           ),
         );
       },

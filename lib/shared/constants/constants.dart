@@ -134,6 +134,7 @@ bool? isAppLanguageEnglish;
 String langCode = '';
 bool isSearching = false;
 double fontSelectedSize = 16;
+String challengeId = '';
 
 List<PopupMenuItem> sourceMenuItems(context) {
   return <PopupMenuItem>[

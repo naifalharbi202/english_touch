@@ -155,6 +155,8 @@ class GetChallengeErrorState extends AppStates {}
 
 class GetChallengeNotFoundState extends AppStates {}
 
+class GetChallengeIdSuccessState extends AppStates {}
+
 // Check Progress State
 
 class ChangeProgressState extends AppStates {}
@@ -170,3 +172,14 @@ class FetchDefinitionsLoadingState extends AppStates {}
 class FetchDefinitionsSuccessState extends AppStates {}
 
 class FetchDefinitionsErrorState extends AppStates {}
+
+// Updating Learned Words State
+
+class UpdateLearnedWordsCounterLoadingState extends AppStates {}
+
+class UpdateLearnedWordsCounterSuccessState extends AppStates {}
+
+class UpdateLearnedWordsCounterErrorState extends AppStates {}
+
+// Change Segment State
+class ChangeSelectedSegmentState extends AppStates {}

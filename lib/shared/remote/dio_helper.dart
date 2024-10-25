@@ -113,4 +113,25 @@ class DioHelper {
       rethrow;
     }
   }
+
+  static Future<Response> updateSingleResource({
+    required String url,
+    required Map<String, dynamic>? data,
+    String lang = 'en',
+    required String? token,
+  }) async {
+    final options = Options(
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    return await dio!.patch(
+      url,
+      data: data,
+      options: options,
+    );
+  }
 }
