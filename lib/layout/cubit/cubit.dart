@@ -773,16 +773,22 @@ class AppCubit extends Cubit<AppStates> {
 
         if (response.statusCode == 200) {
           goalModel = GoalModel.fromJson(response.data['challenge']);
+          acquiredWords = goalModel!.acquiredWords!;
 
-          if (isFromDictionary != null) {
-            print("GOT HEEEEEERE");
-
-            learnedData!['learned_words_counter'] =
+          if (isFromDictionary != null && learnedData != null) {
+            print('COMING AFTER CLICKING On LEARNED In Dictionary');
+            learnedData['learned_words_counter'] =
                 goalModel!.learnedWordsCounter! + 1;
 
             updateLearnedWords(learnedData);
+          } else if (isFromDictionary != null && learnedData == null) {
+            // This means coming from know it part of the screen
+
+            print('COMING AFTER CLICKING ON MY DICTIONARY');
+            emit(GetKnowItSuccessState());
           } else {
             // Just emit state
+            print('COMING AFTER CLICKING ON SET GOAL FROM SETTING------');
             emit(GetChallengeSuccessState());
           }
 
@@ -1297,7 +1303,7 @@ class AppCubit extends Cubit<AppStates> {
       // print('Translations LENGTHHHH ${translations.length}');
       // print('Examples LENGTHHHH ${examples.length}');
       // print('Audio LENGTHHHH ${audioUrls.length}');
-
+      getChallengeId(isFromDictionary: true);
       emit(FetchDefinitionsSuccessState());
     } catch (error) {
       print('ERROR $error');

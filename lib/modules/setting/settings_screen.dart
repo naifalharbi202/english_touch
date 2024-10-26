@@ -253,6 +253,11 @@ class SettingsScreen extends StatelessWidget {
                       child: Text(S.of(context).my_dictionary,
                           style: Theme.of(context).textTheme.bodyLarge!),
                       onPressed: () {
+                        if (AppCubit.get(context).selectedSegment !=
+                            'Studying') {
+                          print('It was on know it');
+                          AppCubit.get(context).selectedSegment = 'Studying';
+                        }
                         AppCubit.get(context).fetchDefinitions();
                       },
                     ),

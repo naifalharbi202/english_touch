@@ -183,3 +183,6 @@ class UpdateLearnedWordsCounterErrorState extends AppStates {}
 
 // Change Segment State
 class ChangeSelectedSegmentState extends AppStates {}
+
+//Get know it list
+class GetKnowItSuccessState extends AppStates {}
